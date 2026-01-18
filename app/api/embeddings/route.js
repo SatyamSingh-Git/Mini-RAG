@@ -2,12 +2,9 @@ import { getCollectionName } from '../../../lib/qdrant.js';
 
 export const runtime = 'nodejs';
 
-const QDRANT_URL = process.env.QDRANT_URL;
-const QDRANT_API_KEY = process.env.QDRANT_API_KEY;
-
-function qdrantHeaders() {
+function qdrantHeaders(apiKey) {
   const headers = { 'Content-Type': 'application/json' };
-  if (QDRANT_API_KEY) headers['api-key'] = QDRANT_API_KEY;
+  if (apiKey) headers['api-key'] = apiKey;
   return headers;
 }
 
@@ -16,17 +13,21 @@ export async function DELETE(request) {
     const body = await request.json().catch(() => ({}));
     const { source, title, deleteAll } = body;
 
+    // Get environment variables in API route
+    const QDRANT_URL = process.env.QDRANT_URL;
+    const QDRANT_API_KEY = process.env.QDRANT_API_KEY;
+
     if (!QDRANT_URL) {
       return Response.json({ ok: false, error: 'Missing QDRANT_URL' }, { status: 500 });
     }
 
-    const collection = getCollectionName();
+    const collection = getCollectionName(process.env.QDRANT_COLLECTION);
 
     if (deleteAll) {
       // Delete entire collection
       const res = await fetch(`${QDRANT_URL}/collections/${collection}`, {
         method: 'DELETE',
-        headers: qdrantHeaders()
+        headers: qdrantHeaders(QDRANT_API_KEY)
       });
 
       if (!res.ok) {
@@ -51,7 +52,7 @@ export async function DELETE(request) {
 
     const res = await fetch(`${QDRANT_URL}/collections/${collection}/points/delete`, {
       method: 'POST',
-      headers: qdrantHeaders(),
+      headers: qdrantHeaders(QDRANT_API_KEY),
       body: JSON.stringify({
         filter: { must }
       })

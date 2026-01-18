@@ -1,6 +1,6 @@
 import { approxTokenCount } from '../../../lib/chunk.js';
 import { embedText, generateAnswer } from '../../../lib/embeddings.js';
-import { searchPoints } from '../../../lib/qdrant.js';
+import { searchPoints, getCollectionName } from '../../../lib/qdrant.js';
 import { mmrSelect } from '../../../lib/mmr.js';
 import { rerank } from '../../../lib/rerank.js';
 
@@ -37,12 +37,29 @@ export async function POST(request) {
       return Response.json({ ok: false, error: 'No query provided' }, { status: 400 });
     }
 
+    // Get environment variables in API route
+    const geminiApiKey = process.env.GEMINI_API_KEY;
+    const embedModel = process.env.GEMINI_EMBED_MODEL || 'text-embedding-004';
+    const chatModel = process.env.GEMINI_CHAT_MODEL || 'gemini-2.5-flash';
+    const maxOutputTokens = Number(process.env.GEMINI_MAX_OUTPUT_TOKENS || 512);
+    const qdrantUrl = process.env.QDRANT_URL;
+    const qdrantApiKey = process.env.QDRANT_API_KEY;
+    const collection = getCollectionName(process.env.QDRANT_COLLECTION);
+    const jinaApiKey = process.env.JINA_API_KEY;
+    const rerankModel = process.env.RERANK_MODEL || 'jina-reranker-v3';
+    
+    // Get configuration values
+    const topK = Number(process.env.RETRIEVE_TOP_K || 50);
+    const mmrTopK = Number(process.env.MMR_TOP_K || 20);
+    const mmrLambda = Number(process.env.MMR_LAMBDA || 0.7);
+    const finalTopN = Number(process.env.RERANK_TOP_N || 8);
+    const minScore = Number(process.env.MIN_RERANK_SCORE || 0.15);
+
     const embedStart = performance.now();
-    const queryVector = await embedText(query);
+    const queryVector = await embedText(query, geminiApiKey, embedModel);
     const embedMs = Math.round(performance.now() - embedStart);
 
     const searchStart = performance.now();
-    const topK = Number(process.env.RETRIEVE_TOP_K || 50);
     const qdrantFilter = filterInput?.source
       ? {
           must: [
@@ -53,7 +70,7 @@ export async function POST(request) {
           ]
         }
       : null;
-    const initialResults = await searchPoints(queryVector, topK, qdrantFilter);
+    const initialResults = await searchPoints(qdrantUrl, qdrantApiKey, collection, queryVector, topK, qdrantFilter);
     const searchMs = Math.round(performance.now() - searchStart);
 
     if (!initialResults.length) {
@@ -72,19 +89,15 @@ export async function POST(request) {
       });
     }
 
-    const mmrTopK = Number(process.env.MMR_TOP_K || 20);
-    const mmrLambda = Number(process.env.MMR_LAMBDA || 0.7);
     const mmrResults = mmrSelect(initialResults, queryVector, mmrTopK, mmrLambda);
 
     const rerankStart = performance.now();
-    const reranked = await rerank(query, mmrResults);
+    const reranked = await rerank(query, mmrResults, jinaApiKey, rerankModel);
     const rerankMs = Math.round(performance.now() - rerankStart);
 
-    const finalTopN = Number(process.env.RERANK_TOP_N || 8);
     const finalDocs = reranked.slice(0, finalTopN);
 
     const topScore = finalDocs[0]?.rerankScore ?? 1;
-    const minScore = Number(process.env.MIN_RERANK_SCORE || 0.15);
 
     if (!finalDocs.length || topScore < minScore) {
       return Response.json({
@@ -110,7 +123,7 @@ export async function POST(request) {
       `Question: ${query}\n\nSources:\n${context}`;
 
     const llmStart = performance.now();
-    const answer = await generateAnswer(prompt);
+    const answer = await generateAnswer(prompt, geminiApiKey, chatModel, maxOutputTokens);
     const llmMs = Math.round(performance.now() - llmStart);
 
     const approxTokens = approxTokenCount(query + context + answer);
