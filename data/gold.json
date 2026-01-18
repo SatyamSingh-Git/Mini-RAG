@@ -1,27 +1,87 @@
-[
-  {
-    "query": "What is the main topic of the document?",
-    "expected_answer": "The document explains ... with citations.",
-    "expected_sources": ["[1]"]
+{
+  "description": "Gold Set for Mini RAG Evaluation - 5 Q&A pairs with expected answers and sources",
+  "version": "1.0",
+  "date": "2026-01-19",
+  "pairs": [
+    {
+      "id": 1,
+      "question": "What is the difference between NumPy arrays and Python lists?",
+      "expected_answer_contains": [
+        "homogeneous",
+        "heterogeneous",
+        "performance",
+        "memory",
+        "faster"
+      ],
+      "expected_source_title": "Interview Questions",
+      "difficulty": "easy",
+      "notes": "Direct factual question with clear answer in sources"
+    },
+    {
+      "id": 2,
+      "question": "How do you install packages in Jupyter notebooks?",
+      "expected_answer_contains": [
+        "!pip install",
+        "package_name",
+        "code cell"
+      ],
+      "expected_source_title": "Interview Questions",
+      "difficulty": "easy",
+      "notes": "Procedural question with specific command"
+    },
+    {
+      "id": 3,
+      "question": "What is a vector database used for in RAG systems?",
+      "expected_answer_contains": [
+        "embeddings",
+        "similarity",
+        "search",
+        "retrieval"
+      ],
+      "expected_source_title": "Interview Questions",
+      "difficulty": "medium",
+      "notes": "Conceptual question requiring synthesis"
+    },
+    {
+      "id": 4,
+      "question": "Compare FastAPI and Flask for building ML APIs",
+      "expected_answer_contains": [
+        "FastAPI",
+        "Flask",
+        "async",
+        "documentation",
+        "type hints"
+      ],
+      "expected_source_title": "Interview Questions",
+      "difficulty": "medium",
+      "notes": "Comparison question requiring multiple facts"
+    },
+    {
+      "id": 5,
+      "question": "What is ChromaDB and what is it used for?",
+      "expected_answer_contains": [
+        "vector database",
+        "embeddings",
+        "open-source"
+      ],
+      "expected_source_title": "Interview Questions",
+      "difficulty": "easy",
+      "notes": "Definition question with specific entity"
+    }
+  ],
+  "evaluation_criteria": {
+    "precision": "Percentage of retrieved sources that are relevant to the question",
+    "recall": "Percentage of relevant sources that were successfully retrieved",
+    "answer_quality": {
+      "grounded": "Answer is based only on provided sources",
+      "cited": "Answer includes inline citations [1], [2], etc.",
+      "accurate": "Facts in answer match facts in sources",
+      "complete": "Answer addresses all aspects of the question"
+    }
   },
-  {
-    "query": "List the key requirements mentioned.",
-    "expected_answer": "The key requirements include ... with citations.",
-    "expected_sources": ["[1]", "[2]"]
-  },
-  {
-    "query": "What chunking strategy is described?",
-    "expected_answer": "It uses chunks of about 1000 tokens with overlap ... [1]",
-    "expected_sources": ["[1]"]
-  },
-  {
-    "query": "Which reranker is configured?",
-    "expected_answer": "The system uses the Jina reranker model ... [1]",
-    "expected_sources": ["[1]"]
-  },
-  {
-    "query": "What should happen when the answer is not in sources?",
-    "expected_answer": "It should respond that it does not know based on sources ... [1]",
-    "expected_sources": ["[1]"]
+  "expected_results": {
+    "precision": ">=0.8 (80%+)",
+    "recall": ">=0.8 (80%+)",
+    "grounded_rate": "100% (should never hallucinate)"
   }
-]
+}
