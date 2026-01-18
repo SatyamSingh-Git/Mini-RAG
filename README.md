@@ -49,20 +49,20 @@ flowchart LR
 
 ## Environment
 
-Create `.env.local`:
+Create `.env.local` (local dev) or set in hosting dashboard:
 
 ```
 GEMINI_API_KEY=...
-GEMINI_CHAT_MODEL=gemini-1.5-flash-latest
+GEMINI_CHAT_MODEL=gemini-2.5-flash
 GEMINI_EMBED_MODEL=text-embedding-004
-GEMINI_MAX_OUTPUT_TOKENS=512
+GEMINI_MAX_OUTPUT_TOKENS=2048
 
 QDRANT_URL=https://YOUR-CLUSTER-URL
 QDRANT_API_KEY=YOUR_QDRANT_KEY
 QDRANT_COLLECTION=rag_chunks
 
 JINA_API_KEY=YOUR_JINA_KEY
-RERANK_MODEL=jina-reranker-v2-base-en
+RERANK_MODEL=jina-reranker-v3
 RERANK_TOP_N=8
 
 CHUNK_TOKENS=1000
@@ -76,6 +76,13 @@ UPSERT_BATCH=64
 COST_PER_1K_INPUT=0
 COST_PER_1K_OUTPUT=0
 ```
+
+## Deployment to Netlify
+
+1. Push to GitHub
+2. Connect repo to Netlify
+3. Add environment variables above in Netlify dashboard
+4. Deploy automatically uses `netlify.toml` settings
 
 ## Quick Start
 
