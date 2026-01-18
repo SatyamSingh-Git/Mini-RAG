@@ -1,6 +1,6 @@
 import { approxTokenCount } from '../../../lib/chunk.js';
 import { embedText, generateAnswer } from '../../../lib/embeddings.js';
-import { searchPoints, getCollectionName } from '../../../lib/qdrant.js';
+import { searchPoints } from '../../../lib/qdrant.js';
 import { mmrSelect } from '../../../lib/mmr.js';
 import { rerank } from '../../../lib/rerank.js';
 
@@ -44,7 +44,7 @@ export async function POST(request) {
     const maxOutputTokens = Number(process.env.GEMINI_MAX_OUTPUT_TOKENS || 512);
     const qdrantUrl = process.env.QDRANT_URL;
     const qdrantApiKey = process.env.QDRANT_API_KEY;
-    const collection = getCollectionName(process.env.QDRANT_COLLECTION);
+    const collection = process.env.QDRANT_COLLECTION || 'rag_chunks';
     const jinaApiKey = process.env.JINA_API_KEY;
     const rerankModel = process.env.RERANK_MODEL || 'jina-reranker-v3';
     

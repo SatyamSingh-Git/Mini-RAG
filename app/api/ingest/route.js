@@ -1,6 +1,6 @@
 import { chunkText } from '../../../lib/chunk.js';
 import { embedTexts } from '../../../lib/embeddings.js';
-import { ensureCollection, hashId, upsertPoints, getCollectionName } from '../../../lib/qdrant.js';
+import { ensureCollection, hashId, upsertPoints } from '../../../lib/qdrant.js';
 
 export const runtime = 'nodejs';
 
@@ -23,7 +23,7 @@ export async function POST(request) {
     const embedModel = process.env.GEMINI_EMBED_MODEL || 'text-embedding-004';
     const qdrantUrl = process.env.QDRANT_URL;
     const qdrantApiKey = process.env.QDRANT_API_KEY;
-    const collection = getCollectionName(process.env.QDRANT_COLLECTION);
+    const collection = process.env.QDRANT_COLLECTION || 'rag_chunks';
     const batchSize = Number(process.env.UPSERT_BATCH || 64);
 
     const chunks = chunkText(text, { chunkTokens, overlapTokens });

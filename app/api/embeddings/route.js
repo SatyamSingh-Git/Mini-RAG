@@ -1,5 +1,3 @@
-import { getCollectionName } from '../../../lib/qdrant.js';
-
 export const runtime = 'nodejs';
 
 function qdrantHeaders(apiKey) {
@@ -21,7 +19,7 @@ export async function DELETE(request) {
       return Response.json({ ok: false, error: 'Missing QDRANT_URL' }, { status: 500 });
     }
 
-    const collection = getCollectionName(process.env.QDRANT_COLLECTION);
+    const collection = process.env.QDRANT_COLLECTION || 'rag_chunks';
 
     if (deleteAll) {
       // Delete entire collection
