@@ -578,11 +578,10 @@ Add environment variables in Vercel Dashboard.
 
 **Author:** Satyam Singh
 
-📄 **[View Resume](https://drive.google.com/file/d/YOUR_RESUME_LINK_HERE/view?usp=sharing)**
+📄 **[View Resume]([https://drive.google.com/file/d/YOUR_RESUME_LINK_HERE/view?usp=sharing](https://drive.google.com/file/d/1Vqmm_NWd2R_YeWXfQF7CnCL2LvFE1ZHA/view?usp=sharing))**
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?logo=linkedin)](https://www.linkedin.com/in/YOUR_LINKEDIN_PROFILE/)
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-black?logo=github)](https://github.com/SatyamSingh-Git)
-[![Email](https://img.shields.io/badge/Email-Contact-red?logo=gmail)](mailto:your.email@example.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?logo=linkedin)](https://www.linkedin.com/in/satyam--singh--/)
+
 
 ---
 
