@@ -1,0 +1,23 @@
+# dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# next.js
+.next/
+out/
+
+# env files
+.env
+.env.local
+.env*.local
+
+# logs
+*.log
+
+# misc
+.DS_Store
+Thumbs.db
+
+# vercel
+.vercel

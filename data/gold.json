@@ -1,0 +1,27 @@
+[
+  {
+    "query": "What is the main topic of the document?",
+    "expected_answer": "The document explains ... with citations.",
+    "expected_sources": ["[1]"]
+  },
+  {
+    "query": "List the key requirements mentioned.",
+    "expected_answer": "The key requirements include ... with citations.",
+    "expected_sources": ["[1]", "[2]"]
+  },
+  {
+    "query": "What chunking strategy is described?",
+    "expected_answer": "It uses chunks of about 1000 tokens with overlap ... [1]",
+    "expected_sources": ["[1]"]
+  },
+  {
+    "query": "Which reranker is configured?",
+    "expected_answer": "The system uses the Jina reranker model ... [1]",
+    "expected_sources": ["[1]"]
+  },
+  {
+    "query": "What should happen when the answer is not in sources?",
+    "expected_answer": "It should respond that it does not know based on sources ... [1]",
+    "expected_sources": ["[1]"]
+  }
+]
